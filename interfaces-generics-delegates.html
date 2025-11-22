@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>接口，泛型与委托 - Interfaces, Generics & Delegates</title>
+    <style>
+      body {
+        background-color: lightgrey;
+        font-family: 'Garamond', serif;
+        margin: 0;
+        padding: 20px;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      .header {
+        background-color: lightblue;
+        text-align: center;
+        padding: 40px;
+        border-radius: 20px;
+        margin-bottom: 20px;
+      }
+      .content {
+        background-color: white;
+        padding: 30px;
+        border-radius: 15px;
+        margin: 20px 0;
+        flex-grow: 1;
+      }
+      h1 {
+        color: #2c3e50;
+        text-align: center;
+      }
+      h2 {
+        color: #34495e;
+        border-bottom: 2px solid lightblue;
+        padding-bottom: 10px;
+        margin-top: 30px;
+      }
+      h3 {
+        color: #5d6d7e;
+        margin-top: 20px;
+      }
+      .code-block {
+        background-color: #f4f4f4;
+        border-left: 4px solid #f0a868;
+        padding: 15px;
+        margin: 15px 0;
+        border-radius: 5px;
+        overflow-x: auto;
+      }
+      code {
+        font-family: 'Courier New', monospace;
+        color: #c0392b;
+      }
+      .example {
+        background-color: #eaf6ff;
+        padding: 15px;
+        margin: 15px 0;
+        border-radius: 5px;
+        border-left: 4px solid #3498db;
+      }
+      .back-link {
+        display: inline-block;
+        background-color: #f0a868;
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 8px;
+        margin-top: 20px;
+      }
+      .back-link:hover {
+        background-color: #e09858;
+      }
+      .footer {
+        background-color: lightblue;
+        text-align: center;
+        padding: 10px;
+        font-size: 12px;
+        border-radius: 20px;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>接口，泛型与委托</h1>
+      <p>Interfaces, Generics & Delegates</p>
+    </div>
+
+    <div class="content">
+      <h2>1. 接口 (Interfaces)</h2>
+      <p>
+        接口是面向对象编程中的一个重要概念，它定义了一组方法、属性或事件的契约，但不提供实现。
+        接口允许不同的类实现相同的行为规范，从而实现多态性。
+      </p>
+      
+      <h3>接口的特点：</h3>
+      <ul>
+        <li>定义行为契约，不包含实现</li>
+        <li>支持多重继承（一个类可以实现多个接口）</li>
+        <li>提高代码的可扩展性和可维护性</li>
+        <li>实现松耦合设计</li>
+      </ul>
+
+      <div class="example">
+        <h3>C# 接口示例：</h3>
+        <div class="code-block">
+          <code>
+// 定义接口<br>
+public interface IAnimal<br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;void MakeSound();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;void Move();<br>
+}<br>
+<br>
+// 实现接口<br>
+public class Dog : IAnimal<br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;public void MakeSound()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Console.WriteLine("Woof!");<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;public void Move()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Console.WriteLine("Dog runs");<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}
+          </code>
+        </div>
+      </div>
+
+      <h2>2. 泛型 (Generics)</h2>
+      <p>
+        泛型允许您编写类型安全的代码，同时提高代码重用性。通过使用泛型，可以创建类、方法、接口和委托，
+        这些类型参数可以在使用时指定具体类型，从而避免类型转换和装箱/拆箱操作。
+      </p>
+
+      <h3>泛型的优势：</h3>
+      <ul>
+        <li>类型安全：编译时类型检查</li>
+        <li>性能优化：避免装箱和拆箱</li>
+        <li>代码重用：一次编写，多种类型使用</li>
+        <li>更清晰的代码：减少类型转换</li>
+      </ul>
+
+      <div class="example">
+        <h3>C# 泛型示例：</h3>
+        <div class="code-block">
+          <code>
+// 泛型类<br>
+public class Stack&lt;T&gt;<br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;private List&lt;T&gt; items = new List&lt;T&gt;();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;public void Push(T item)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;items.Add(item);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;public T Pop()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (items.Count == 0) throw new InvalidOperationException();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;T item = items[items.Count - 1];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;items.RemoveAt(items.Count - 1);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return item;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}<br>
+<br>
+// 使用<br>
+Stack&lt;int&gt; intStack = new Stack&lt;int&gt;();<br>
+Stack&lt;string&gt; stringStack = new Stack&lt;string&gt;();
+          </code>
+        </div>
+      </div>
+
+      <h2>3. 委托 (Delegates)</h2>
+      <p>
+        委托是一种引用类型，用于封装方法。委托类似于C/C++中的函数指针，但更加类型安全。
+        委托常用于实现事件和回调方法，是实现观察者模式的基础。
+      </p>
+
+      <h3>委托的特点：</h3>
+      <ul>
+        <li>类型安全的函数指针</li>
+        <li>支持多播（一个委托可以调用多个方法）</li>
+        <li>是事件的基础</li>
+        <li>支持匿名方法和Lambda表达式</li>
+      </ul>
+
+      <div class="example">
+        <h3>C# 委托示例：</h3>
+        <div class="code-block">
+          <code>
+// 定义委托<br>
+public delegate void MathOperation(int a, int b);<br>
+<br>
+public class Calculator<br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;public static void Add(int a, int b)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Console.WriteLine($"Sum: {a + b}");<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;public static void Multiply(int a, int b)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Console.WriteLine($"Product: {a * b}");<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}<br>
+<br>
+// 使用委托<br>
+MathOperation operation = Calculator.Add;<br>
+operation(5, 3);  // 输出: Sum: 8<br>
+<br>
+// 使用Lambda表达式<br>
+MathOperation lambdaOp = (a, b) => Console.WriteLine($"Result: {a - b}");<br>
+lambdaOp(10, 4);  // 输出: Result: 6
+          </code>
+        </div>
+      </div>
+
+      <h2>三者的关系</h2>
+      <p>
+        接口、泛型和委托是现代编程语言中的重要特性，它们经常一起使用：
+      </p>
+      <ul>
+        <li><strong>接口 + 泛型</strong>: 可以创建泛型接口，如 IEnumerable&lt;T&gt;，提供类型安全的集合操作</li>
+        <li><strong>接口 + 委托</strong>: 接口可以定义委托类型的成员，用于回调机制</li>
+        <li><strong>泛型 + 委托</strong>: .NET提供了泛型委托如 Action&lt;T&gt; 和 Func&lt;T, TResult&gt;</li>
+        <li><strong>三者结合</strong>: 在LINQ等高级特性中，三者协同工作实现强大的功能</li>
+      </ul>
+
+      <div class="example">
+        <h3>综合示例：</h3>
+        <div class="code-block">
+          <code>
+// 泛型接口<br>
+public interface IRepository&lt;T&gt;<br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;void Add(T item);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;T Get(int id);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;void ProcessAll(Action&lt;T&gt; processor);  // 使用泛型委托<br>
+}<br>
+<br>
+// 实现<br>
+public class UserRepository : IRepository&lt;User&gt;<br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;private List&lt;User&gt; users = new List&lt;User&gt;();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;public void Add(User item) => users.Add(item);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;public User Get(int id) => users.FirstOrDefault(u => u.Id == id);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;public void ProcessAll(Action&lt;User&gt; processor)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;foreach (var user in users)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;processor(user);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}
+          </code>
+        </div>
+      </div>
+
+      <a href="index.html" class="back-link">← 返回首页 (Back to Home)</a>
+    </div>
+
+    <div class="footer">
+      <p>the webpage of Zephyr - Programming Concepts</p>
+    </div>
+  </body>
+</html>
